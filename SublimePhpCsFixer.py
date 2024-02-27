@@ -189,7 +189,6 @@ class FixerProcess:
             config,
             allow_risky,
             "--using-cache=no",
-            "--path-mode=intersection",
             tmp_file,
         ]))
 
