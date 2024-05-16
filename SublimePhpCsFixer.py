@@ -182,6 +182,7 @@ class FixerProcess:
             config = None
 
         cmd = [
+            'export PROJECT="{self.settings.folder}";',
             self.settings.get_expanded('php_path'),
             self.get_configured_php_cs_fixer_path(),
             "fix",
@@ -191,14 +192,6 @@ class FixerProcess:
             "--using-cache=no",
             tmp_file,
         ]
-
-        project_data = sublime.active_window().project_data()
-        if project_data:
-            project_file = self.window.project_file_name()
-            if project_file:
-                project_name = os.path.basename(project_file).replace('.sublime-project', '')
-                'export PROJECT="{project_name}";'
-                cmd.insert(0, ['export PROJECT="{project_name}";'])
         
         return list(filter(None, cmd))
 
