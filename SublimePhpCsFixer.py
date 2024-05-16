@@ -181,8 +181,7 @@ class FixerProcess:
             self.logger.console("rules and config are both present, rules prevails")
             config = None
 
-        cmd = [
-            'export PROJECT="{self.settings.folder}";',
+        return list(filter(None, [
             self.settings.get_expanded('php_path'),
             self.get_configured_php_cs_fixer_path(),
             "fix",
@@ -191,9 +190,7 @@ class FixerProcess:
             allow_risky,
             "--using-cache=no",
             tmp_file,
-        ]
-        
-        return list(filter(None, cmd))
+        ]))
 
     def config_param(self):
         configs = self.settings.get("config")
@@ -361,7 +358,7 @@ class SublimePhpCsFixCommand(sublime_plugin.TextCommand):
             exclude = [exclude]
 
         for pattern in exclude:
-            if re.match(pattern, file_name) is not None:
+            if re.match(re.escape(pattern), file_name) is not None:
                 self.logger.console(
                     file_name + ' is excluded via pattern: ' + pattern)
                 return True
