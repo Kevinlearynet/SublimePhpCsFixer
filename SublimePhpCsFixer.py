@@ -181,7 +181,7 @@ class FixerProcess:
             self.logger.console("rules and config are both present, rules prevails")
             config = None
 
-        return list(filter(None, [
+        cmd = [
             self.settings.get_expanded('php_path'),
             self.get_configured_php_cs_fixer_path(),
             "fix",
@@ -189,9 +189,18 @@ class FixerProcess:
             config,
             allow_risky,
             "--using-cache=no",
-            "--path-mode=intersection",
             tmp_file,
-        ]))
+        ]
+
+        project_data = self.window.project_data()
+        if project_data:
+            project_file = self.window.project_file_name()
+            if project_file:
+                project_name = os.path.basename(project_file).replace('.sublime-project', '')
+                'export PROJECT="{project_name}";'
+                cmd.insert(0, ['export PROJECT="{project_name}";'])
+        
+        return list(filter(None, cmd))
 
     def config_param(self):
         configs = self.settings.get("config")
