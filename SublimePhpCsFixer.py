@@ -192,7 +192,7 @@ class FixerProcess:
             tmp_file,
         ]
 
-        project_data = self.window.project_data()
+        project_data = sublime.active_window().project_data()
         if project_data:
             project_file = self.window.project_file_name()
             if project_file:
